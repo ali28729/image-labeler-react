@@ -254,7 +254,7 @@ export class Annotator extends React.Component<Props, State>{
             }
             
             if (this.boxes.length !== 0){
-                this.chooseBox(this.boxes[0]);
+                // this.chooseBox(this.boxes[0]);
             }
         }
            
@@ -282,7 +282,7 @@ export class Annotator extends React.Component<Props, State>{
             });
 
             if (this.boxes.length !== 0){
-                this.chooseBox(this.boxes[0]);
+                // this.chooseBox(this.boxes[0]);
             }
         }
 
@@ -301,7 +301,7 @@ export class Annotator extends React.Component<Props, State>{
 
             // when image is loaded boxes position may shift, we need to re-locate the annotation position
             if (this.chosenBox){
-                this.chooseBox(this.chosenBox);
+                // this.chooseBox(this.chosenBox);
             }
         });
 
@@ -755,10 +755,10 @@ export class Annotator extends React.Component<Props, State>{
         // Zoom in / zoom out threshold
         let newWidth = currentWidth + deltaWidth;
         let newHeight = currentHeight + deltaHeight;
-        if (newWidth < this.props.height / 2 || newWidth > this.props.width * 8) {
+        if (newWidth < this.props.height / 1 || newWidth > this.props.width * 8) {
             return;
         }
-        if (newHeight < this.props.height / 2 || newHeight > this.props.height * 8) {
+        if (newHeight < this.props.height / 1 || newHeight > this.props.height * 8) {
             return;
         }
 
@@ -816,8 +816,8 @@ export class Annotator extends React.Component<Props, State>{
 
             let currentWidth = (this.image.width * this.scale.x);
             let currentHeight = (this.image.height * this.scale.y);
-            let halfWidth = this.props.width / 2,
-                halfHeight = this.props.height / 2;
+            let halfWidth = 0,
+                halfHeight = 0;
             //edge cases
             if (this.position.x > halfWidth) {
                 this.position.x = halfWidth;
@@ -926,9 +926,9 @@ export class Annotator extends React.Component<Props, State>{
                 this.ctx.strokeStyle = getStrokeStyle(box.annotation);
                 this.ctx.strokeRect(box.x, box.y, box.w, box.h);
 
-                this.ctx.fillStyle = 'rgba(200, 200, 200, 0.5)';
-                this.ctx.lineWidth = 3 / this.scale.x;
-                this.ctx.strokeRect(box.x + margin, box.y + margin, box.w - margin * 2, box.h - margin * 2)
+                // this.ctx.fillStyle = 'rgba(200, 200, 200, 0.5)';
+                // this.ctx.lineWidth = 3 / this.scale.x;
+                // this.ctx.strokeRect(box.x + margin, box.y + margin, box.w - margin * 2, box.h - margin * 2)
                 // text
                 this.ctx.fillStyle = 'rgba(40, 40, 40, 0.3)';
                 this.ctx.textAlign = 'center';
@@ -1133,6 +1133,7 @@ export class Annotator extends React.Component<Props, State>{
                         }}
                     >                        
                         <Select
+                            showSearch
                             onChange={(value: string) => {
                                 if (this.chosenBox !== undefined) {
                                     this.chosenBox.annotation = value;

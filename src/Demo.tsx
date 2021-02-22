@@ -35,7 +35,7 @@ const Component: React.FC = (props) => {
           console.log(labeledData);
         }}
         types={['A', 'B', 'Cylinder']}
-        typesColor={['#555','#189','#000']}
+        typesColor={['#b9d6f2ff','#061a40ff','#0353a4ff','#006daaff','#003559ff']}
         defaultType={"Cylinder"}
         sceneTypes={['1', '2', '3']}
         defaultSceneType={defaultSceneType}
