@@ -762,13 +762,13 @@ export class Annotator extends React.Component<Props, State>{
             return;
         }
 
-        //finally affectations
-        this.scale.x = newScale;
-        this.scale.y = newScale;
-        this.position.x = newPosX;
-        this.position.y = newPosY;
+        // //finally affectations
+        // this.scale.x = newScale;
+        // this.scale.y = newScale;
+        // this.position.x = newPosX;
+        // this.position.y = newPosY;
 
-        this.refreshBoxTipPosition();
+        // this.refreshBoxTipPosition();
     };
 
     doMove = (relativeX: number, relativeY: number) => {
