@@ -43,8 +43,8 @@ export default App;
 
 |Shortcut Key| Action|
 |:-----------|:------|
-|   Enter / Space    |  Upload  |
-|   Tab    |  Switch Mode (Annotate|Move)  |
+|   W    |  Upload  |
+|   E    |  Switch Mode (Annotate|Move)  |
 |   Q    |  Delete Bounding Box  |
 |   +    |  Zoom In  |
 |   -    |  Zoom Out  |

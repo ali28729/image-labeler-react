@@ -5,8 +5,10 @@ import { Annotator } from './Annotator';
 
 const Component: React.FC = (props) => {
   const [defaultSceneType, setDefault] = useState(undefined);
-  const [url, setUrl] = useState("https://i.postimg.cc/cJrdb8Sx/screenshot.png");
+  const [a, setA] = useState(true);
 
+  const [url, setUrl] = useState("https://i.postimg.cc/cJrdb8Sx/screenshot.png");
+  setTimeout(() => setA(false) ,1000)
   return (
     <div>
       <div style={{
@@ -56,6 +58,9 @@ const Component: React.FC = (props) => {
           annotation: 'A',
         }]}
         disableAnnotation={false}
+        bboxStrokeWidth={1}
+        resetBoxesTrigger={a}
+        uploadTrigger={true}
       />
     </div>
   )

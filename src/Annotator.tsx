@@ -22,7 +22,10 @@ interface Props {
     showButton?: boolean, // showing button or not, default true
     sceneTypes?: Array<string>,
     className?: string,
-    style?: any
+    style?: any,
+    bboxStrokeWidth: number,
+    uploadTrigger: boolean,
+    resetBoxesTrigger: boolean
 }
 
 interface D2 {
@@ -202,7 +205,7 @@ export class Annotator extends React.Component<Props, State>{
         this.position = { x: 0, y: 0 };
         this.scale = { x: 0.5, y: 0.5 };
         this.state = {
-            isAnnotating: false,
+            isAnnotating: true,
             showAnnotation: false,
             hover: false,
             mouse_down: false,
@@ -246,6 +249,10 @@ export class Annotator extends React.Component<Props, State>{
             this.initCanvas(this.props.imageUrl);
         }
        
+        if(prevProps.uploadTrigger != this.props.uploadTrigger) {  
+            this.onUpload();
+        }
+
         if(prevProps.defaultBoxes != this.props.defaultBoxes) {
             if(this.props && this.props.defaultBoxes) {
                 this.boxes = this.props.defaultBoxes.map((bbox: BoundingBox) => 
@@ -257,7 +264,11 @@ export class Annotator extends React.Component<Props, State>{
                 // this.chooseBox(this.boxes[0]);
             }
         }
-           
+       
+        if(prevProps.resetBoxesTrigger != this.props.resetBoxesTrigger) {  
+            this.boxes = []
+        }
+
       }
 
     componentDidMount(): void {
@@ -439,12 +450,12 @@ export class Annotator extends React.Component<Props, State>{
             } else if (e.key === '-' || e.key === '_' || e.keyCode == 37 || e.keyCode == 40) {//-
                 e.preventDefault();
                 this.doZoom(-5);
-            } else if (e.key === 'Enter' || e.keyCode == 13 || e.which == 13 || e.key === '(space)' || e.keyCode == 32 || e.which == 32) {
+            } else if (e.key === 'W' || e.key === 'w' || e.keyCode == 87 || e.which == 87){
                 this.onUpload();
                 e.preventDefault();
-                e.stopPropagation();
-            } else if (e.key === 'Tab' || e.keyCode == 9 || e.which == 9){
-                this.switchMode();
+                e.stopPropagation();            
+            } else if (e.key === 'E' || e.key === 'e' || e.keyCode == 69 || e.which == 69) {
+                // this.switchMode();
             } else if (e.key === 'Q' || e.key === 'q' || e.keyCode == 81 || e.which == 81){
                 this.onDelete();
                 this.setState({isAnnotating: true});
@@ -843,7 +854,7 @@ export class Annotator extends React.Component<Props, State>{
             throw new Error("Canvas does not exist!");
         }
 
-        const margin = 8;
+        const margin = 3;
         // this.ctx.clearRect(0, 0, this.props.width, this.props.height);
         this.ctx.drawImage(this.bg, 0, 0, Math.min(this.props.width, 600), Math.min(this.props.height, 600),
             0, 0, this.props.width, this.props.height);
@@ -884,7 +895,7 @@ export class Annotator extends React.Component<Props, State>{
 
         for (let i = 0; i < this.boxes.length; i++) {
             let box = this.boxes[i];
-            const fontSize = 30 / this.scale.x;
+            const fontSize = 18 / this.scale.x;
             if (box.chosen) {
                 if (box.hover){
                     this.ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
@@ -910,19 +921,20 @@ export class Annotator extends React.Component<Props, State>{
                     this.ctx.fillText(box.annotation, box.x + box.w / 2, box.y + box.h / 2 + fontSize / 2);
                 }
             } else if (box.hover) {
-                this.ctx.lineWidth = 5;
-                this.ctx.strokeStyle = getStrokeStyle(box.annotation);
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeStyle = '#000';
                 this.ctx.strokeRect(box.x, box.y, box.w, box.h);
 
                 this.ctx.fillStyle = 'rgba(255, 100, 145, 0.3)';
                 this.ctx.fillRect(box.x, box.y, box.w, box.h);
                 // text
                 this.ctx.fillStyle = 'rgba(40, 40, 40, 0.8)';
-                this.ctx.textAlign = 'center';
+                this.ctx.textAlign = 'start';
+                this.ctx.textBaseline = "bottom";
                 this.ctx.font = fontSize + 'px Ubuntu';
-                this.ctx.fillText(box.annotation, box.x + box.w / 2, box.y + box.h / 2 + fontSize / 2);
+                this.ctx.fillText(box.annotation, box.x, box.y - fontSize / 2 + fontSize / 2);
             } else {
-                this.ctx.lineWidth = 5;
+                this.ctx.lineWidth = this.props.bboxStrokeWidth || 2;
                 this.ctx.strokeStyle = getStrokeStyle(box.annotation);
                 this.ctx.strokeRect(box.x, box.y, box.w, box.h);
 
@@ -930,10 +942,11 @@ export class Annotator extends React.Component<Props, State>{
                 // this.ctx.lineWidth = 3 / this.scale.x;
                 // this.ctx.strokeRect(box.x + margin, box.y + margin, box.w - margin * 2, box.h - margin * 2)
                 // text
-                this.ctx.fillStyle = 'rgba(40, 40, 40, 0.3)';
-                this.ctx.textAlign = 'center';
+                this.ctx.fillStyle = getStrokeStyle(box.annotation);
+                this.ctx.textAlign = 'start';
+                this.ctx.textBaseline = "bottom";
                 this.ctx.font = fontSize + 'px Ubuntu';
-                this.ctx.fillText(box.annotation, box.x + box.w / 2, box.y + box.h / 2 + fontSize / 2);
+                this.ctx.fillText(box.annotation, box.x, box.y - fontSize / 2 + fontSize / 2);
             }
         }
 
@@ -1060,7 +1073,7 @@ export class Annotator extends React.Component<Props, State>{
         const buttons = (
             showButton ? (
                 <React.Fragment>
-                    <Button style={{ margin: 8 }} onClick={() => this.setState({ isAnnotating: !this.state.isAnnotating })} >
+                    <Button style={{ margin: 8 }} onClick={() => this.setState({ isAnnotating: true })} >
                         To {this.state.isAnnotating ? 'Move' : 'Annotate'}
                     </Button>
                     <Button onClick={this.onUpload} style={{ marginRight: 8 }} disabled={this.props.imageUrl.length === 0}>
