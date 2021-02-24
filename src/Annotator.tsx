@@ -1161,7 +1161,7 @@ export class Annotator extends React.Component<Props, State>{
                             )}
                         </Select>
 
-                        <Button
+                        {/* <Button
                             icon={isLocked ? 'lock' : 'unlock'}
                             shape="circle"
                             type="primary"
@@ -1181,7 +1181,7 @@ export class Annotator extends React.Component<Props, State>{
                                     }
                                 }
                             }}
-                        />
+                        /> */}
                         <Button
                             icon="delete"
                             shape="circle"
